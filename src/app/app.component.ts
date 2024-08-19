@@ -13,27 +13,32 @@ export class AppComponent {
     if (numbers.trim() === '') {
       return 0;
     }
-    // Replace newline characters with commas for uniform splitting
-    const cleanedValue = numbers.replace(/\n+/g, ',');
-    const substrings = cleanedValue.split(',');
-    // Map each substring to a floating-point number after trimming whitespace
-    const values = substrings.map(substring => {
-      // Trim any leading or trailing whitespace and convert to a number
-      const number = parseFloat(substring.trim());
-      return number;
-    });
+     // Check for custom delimiter
+     const delimiterMatch = numbers.match(/^\/\/(.+?)\n(.+)/s);
 
-    // Use reduce to sum up the valid numbers (ignoring NaN values)
-    const sum = values.reduce((accumulator, current) => {
-      // Add only valid numbers (not NaN) to the accumulator
-      if (!isNaN(current)) {
-        return accumulator + current;
-      }
-      return accumulator; // If current is NaN, just return the accumulator unchanged
-    }, 0);
-
-    // Return the computed sum
-    return sum;
+     let numbersString: string;
+ 
+     if (delimiterMatch) {
+       // Extract the delimiter and numbers part
+       const delimiter = delimiterMatch[1];
+       numbersString = delimiterMatch[2];
+ 
+       // Replace all instances of the custom delimiter and newlines with commas
+       const cleanedValue = numbersString.replace(new RegExp(`\\${delimiter}`, 'g'), ',').replace(/\n+/g, ',');
+ 
+       // Split by commas, convert to numbers, and sum up
+       return cleanedValue.split(',')
+                           .map(num => parseFloat(num.trim()))
+                           .reduce((acc, num) => !isNaN(num) ? acc + num : acc, 0);
+     } else {
+       // Default handling when no custom delimiter is provided
+       // Replace newlines with commas
+       const cleanedValue = numbers.replace(/\n+/g, ',');
+       // Split by commas, convert to numbers, and sum up
+       return cleanedValue.split(',')
+                           .map(num => parseFloat(num.trim()))
+                           .reduce((acc, num) => !isNaN(num) ? acc + num : acc, 0);
+     }
   }
   onSubmit(): void {
     const result = this.add(this.inputValue);

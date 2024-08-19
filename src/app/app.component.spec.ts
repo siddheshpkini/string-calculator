@@ -215,4 +215,65 @@ describe('AppComponent', () => {
     // Check if the outputValue is 0
     expect(component.outputValue).toBe(0);
   });
+  it('should handle a custom delimiter correctly', () => {
+    // Set the input value with a custom delimiter
+    component.inputValue = '//;\n1;2;3';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(6);
+  });
+
+  it('should handle a custom delimiter with spaces', () => {
+    // Set the input value with a custom delimiter and spaces
+    component.inputValue = '//:\n 10 : 20 : 30.5 : 40 ';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(100.5);
+  });
+
+  it('should handle default comma delimiter correctly', () => {
+    // Set the input value with default delimiter (comma)
+    component.inputValue = '10, 20, 30, 40';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(100);
+  });
+
+  it('should return 0 for empty input or input with only delimiter', () => {
+    // Set the input value to an empty string
+    component.inputValue = '';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+
+    // Set the input value to only delimiter with newlines
+    component.inputValue = '//;\n\n';
+
+    // Trigger form submission
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+  });
 });
