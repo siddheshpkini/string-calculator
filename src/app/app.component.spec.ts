@@ -276,4 +276,13 @@ describe('AppComponent', () => {
     // Check if the outputValue is 0
     expect(component.outputValue).toBe(0);
   });
+  
+  it('should throw an exception when negative values are present', () => {
+    // Set the input value with negative numbers
+    component.inputValue = '10,-20,30,-40';
+
+    // Trigger form submission and expect an exception to be thrown
+    const form = fixture.debugElement.query(By.css('form'));
+    expect(() => form.triggerEventHandler('ngSubmit', null)).toThrowError('Negative values are not allowed: -20, -40');
+  });
 });
