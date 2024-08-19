@@ -154,5 +154,65 @@ describe('AppComponent', () => {
     // Check if the outputValue is 0
     expect(component.outputValue).toBe(0);
   });
+  it('should handle newline characters and return the sum of numbers', () => {
+    // Set the input value with newline-separated numbers
+    component.inputValue = '1\n2\n3\n4\n5';
 
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(15);
+  });
+
+  it('should handle a mix of commas and newlines correctly', () => {
+    // Set the input value with mixed commas and newlines
+    component.inputValue = '10\n20, 30\n40';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(100);
+  });
+
+  it('should return 0 for input with only newlines', () => {
+    // Set the input value to only newlines
+    component.inputValue = '\n\n\n';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+  });
+
+  it('should return 0 for empty input or input with newlines and spaces only', () => {
+    // Set the input value to an empty string
+    component.inputValue = '';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+    
+    // Set the input value to newlines and spaces
+    component.inputValue = ' \n \n \n ';
+
+    // Trigger form submission
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+  });
 });

@@ -13,8 +13,9 @@ export class AppComponent {
     if (numbers.trim() === '') {
       return 0;
     }
-    const substrings = numbers.split(',');
-
+    // Replace newline characters with commas for uniform splitting
+    const cleanedValue = numbers.replace(/\n+/g, ',');
+    const substrings = cleanedValue.split(',');
     // Map each substring to a floating-point number after trimming whitespace
     const values = substrings.map(substring => {
       // Trim any leading or trailing whitespace and convert to a number
