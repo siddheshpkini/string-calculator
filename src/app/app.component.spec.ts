@@ -119,4 +119,40 @@ describe('AppComponent', () => {
     // Check if the outputValue was updated correctly
     expect(component.outputValue).toBe(0);
   });
+  it('should handle comma-separated numbers and junk values with spaces correctly', () => {
+    // Set the input value with comma-separated numbers including spaces
+    component.inputValue = '10,   20, 30.5, 40, abc, !@#';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is the sum of the numbers
+    expect(component.outputValue).toBe(100.5);
+  });
+
+  it('should return 0 for empty input or input with only commas and spaces', () => {
+    // Set the input value to an empty string
+    component.inputValue = '';
+
+    // Trigger form submission
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+    
+    // Set the input value to commas and spaces
+    component.inputValue = ', , , ';
+
+    // Trigger form submission
+    form.triggerEventHandler('ngSubmit', null);
+    fixture.detectChanges();
+
+    // Check if the outputValue is 0
+    expect(component.outputValue).toBe(0);
+  });
+
 });

@@ -13,7 +13,26 @@ export class AppComponent {
     if (numbers.trim() === '') {
       return 0;
     }
-    return parseInt(numbers);
+    const substrings = numbers.split(',');
+
+    // Map each substring to a floating-point number after trimming whitespace
+    const values = substrings.map(substring => {
+      // Trim any leading or trailing whitespace and convert to a number
+      const number = parseFloat(substring.trim());
+      return number;
+    });
+
+    // Use reduce to sum up the valid numbers (ignoring NaN values)
+    const sum = values.reduce((accumulator, current) => {
+      // Add only valid numbers (not NaN) to the accumulator
+      if (!isNaN(current)) {
+        return accumulator + current;
+      }
+      return accumulator; // If current is NaN, just return the accumulator unchanged
+    }, 0);
+
+    // Return the computed sum
+    return sum;
   }
   onSubmit(): void {
     const result = this.add(this.inputValue);
